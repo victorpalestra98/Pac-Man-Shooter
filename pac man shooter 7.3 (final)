@@ -1,0 +1,619 @@
+var disparo = false , xd , yd , xj , yj , q = 0 , t = 0 , q1 = 68 , t1 = 140 , colidir = false;
+
+var vidas = 3 , pontuacao = 0 , nivel = 1;
+
+var tamBloco = 40;
+
+var x = 50 , y = 98, z = 15 , p = 220 , n = 220, m = -50 , f = 60 , g = -100 , h = 140 , h1 = -200 , h2 = 450 , h3 = 380 , n1 =-200 , m1 = 60 , n2 = -200 , m2 = 380;
+
+var n3 = 220 , m3 = 440 , n4 = 300 , m4 = 440 , n5 = 510 , m5 = 140 , n6 = 510 , m6 = 300 , v1 = -250 , v2 = 300 ;
+
+var tela = 1 , continuar = 0;
+
+
+cenario = [ 
+  ['#','#','#','#','#','#','#','#','#','#','#'],
+  ['#','v','v','v','v','v','v','v','v','v','#'],
+  ['#','v','#','v','#','v','#','v','#','v','#'],
+  ['#','v','v','v','v','v','v','v','v','v','#'],
+  ['#','v','#','v','#','v','#','v','#','v','#'],
+  ['#','v','v','v','v','v','v','v','v','v','#'],
+  ['#','v','#','v','#','v','#','v','#','v','#'],
+  ['#','v','v','v','v','v','v','v','v','v','#'],
+  ['#','v','#','v','#','v','#','v','#','v','#'],
+  ['#','v','v','v','v','v','v','v','v','v','#'],
+  ['#','#','#','#','#','#','#','#','#','#','#'],
+
+]; 
+
+function pacMan(posPacX, posPacY) {
+  if(vidas == 3 || vidas == 4 ){
+  	stroke(250,250,5); 
+  	strokeWeight(3); 
+  	fill(230,230,0);
+  	arc(posPacX+2, posPacY+2, tamBloco -6, tamBloco-6, PI/6,TWO_PI - PI/6, PIE);
+  	strokeWeight(1); 
+  	fill(0,0,0);
+  	ellipse(posPacX,posPacY-(tamBloco)/5,tamBloco/6, tamBloco/6);
+                 }
+  
+  if( vidas >=5 ){
+  	stroke(250,250,5); 
+  	strokeWeight(3); 
+  	fill(5,50,250);
+  	arc(posPacX+2, posPacY+2, tamBloco -6, tamBloco-6, PI/6,TWO_PI - PI/6, PIE);
+  	strokeWeight(1); 
+  	fill(0,0,0);
+  	ellipse(posPacX,posPacY-(tamBloco)/5,tamBloco/6, tamBloco/6);
+  		}
+  
+  if( vidas <= 2 ){
+  	stroke(250,250,5); 
+  	strokeWeight(3); 
+  	fill(250,120,10);
+  	arc(posPacX+2, posPacY+2, tamBloco -6, tamBloco-6, PI/6,TWO_PI - PI/6, PIE);
+  	strokeWeight(1); 
+  	fill(0,0,0);
+  	ellipse(posPacX,posPacY-(tamBloco)/5,tamBloco/6, tamBloco/6);
+		}
+} 
+
+function colisao(px, py) {
+  posColuna = Math.floor( px / tamBloco ); 
+  posLinha = Math.floor( py / tamBloco );
+  if ( cenario[posLinha][posColuna] == '#' ) {
+     return true;     
+  }
+  else {
+     return false;  
+  }
+  
+}
+
+function setup() {
+ createCanvas(440,510);
+ x = 60; 
+ y = 60;
+}
+
+
+function draw() {
+  
+if( tela == 1 ){
+  background(0);
+  textSize(30)
+  fill(135,206,235);
+  text("Bem Vindo ao Pac-Man Shooter",5,250);
+  textSize(25);
+  text("Pressione ENTER para começar",35,300);
+  if (keyIsDown(ENTER) ){
+       tela = 2;  
+    } 
+  }
+  
+if( tela == 2 ){
+  
+  background(0);
+ 
+if( vidas >= 1 ){  
+if( nivel <= 5 + continuar ){  
+  
+  for ( i = 0; i < cenario.length; i++ ) { 
+    for ( j = 0; j < cenario[0].length; j++ ) {  
+      if ( cenario[i][j] == '#' ) {
+        //image(imgParede,j*tamBloco,i*tamBloco); 
+        fill(100,100,255);
+        rect(j*tamBloco,i*tamBloco,tamBloco,tamBloco); 
+      }
+    }
+  }
+  
+//movimentação
+  
+   if (keyIsDown(LEFT_ARROW)) {
+     if ( ! colisao( x - 4, y ) ) {
+       x = x - 4;       
+     }
+   }
+   if ( keyIsDown(RIGHT_ARROW)) { 
+     if ( ! colisao( x + 4, y ) ) {
+       x = x + 4  ;       
+     } 
+   }
+  if ( keyIsDown(UP_ARROW)) { 
+     if ( ! colisao( y - 4, x ) ) {
+       y = y - 4;       
+     } 
+   }
+  if ( keyIsDown(DOWN_ARROW)) { 
+     if ( ! colisao( y + 4, x ) ) {
+       y = y + 4 ;       
+     } 
+   }
+   
+   pacMan(x,y); 
+  
+  //disparo 
+  
+  if (keyIsDown(CONTROL) && (! disparo) ){ 
+    disparo = true; 
+    xd = x;
+    yd = y; 
+    }
+
+   if (disparo) {
+    fill(150,200,80);
+    ellipse(xd,yd,8,8);
+
+  if (disparo) {
+    xd = xd + 7.5;
+    if (xd > width||xd==z) {
+      disparo = false; 
+    	}
+ 	 }
+   }    
+  
+  //objetos aleatórios
+  
+  fill(0,0,200)
+  ellipse(z,p,30,30); 
+  fill(0,100,200);
+  ellipse(z,p,15,15);
+  fill(0,100,0);
+  ellipse(z,p,(8),(8));
+  z = z + 2;
+  if(z > 400){
+    z = random(-150,-50);
+  } 
+  
+  fill(0,0,200)
+  ellipse(f,g,30,30); 
+  fill(0,100,200);
+  ellipse(f,g,15,15);
+  fill(0,100,0);
+  ellipse(f,g,(8),(8));
+  g = g + 1.3;
+  if(g > 410){
+    g = random(-300,-150);
+  }
+  
+  fill(0,0,200)
+  ellipse(h,h1,30,30); 
+  fill(0,100,200);
+  ellipse(h,h1,15,15);
+  fill(0,100,0);
+  ellipse(h,h1,(8),(8));
+  h1 = h1 + 1.3;
+  if(h1 > 410){
+    h1 = random(-300,-400);
+  } 
+  
+  fill(230, 237, 30);
+  ellipse(q,t,20,20);
+  q = 220
+  t = t + 1.5;
+  if(t > 400){
+    t = random(-1100,-3000);
+  }
+  
+  //objetos nivel 2 
+  
+  if(nivel == 2 || nivel == 3 || nivel == 4 ||nivel == 5 || nivel > 5 ){
+  fill(0,0,200)
+  ellipse(n,m,30,30); 
+  fill(0,100,200);
+  ellipse(n,m,15,15);
+  fill(0,100,0);
+  ellipse(n,m,(8),(8));
+  m = m + 1.5;
+  if(m > 400){
+    m = random(-80,-180);
+  }
+ } 
+  
+  if(nivel == 2 || nivel == 3 || nivel == 4 || nivel == 5 || nivel > 5 ){
+  fill(0,0,200)
+  ellipse(v1,v2,30,30); 
+  fill(0,100,200);
+  ellipse(v1,v2,15,15);
+  fill(0,100,0);
+  ellipse(v1,v2,(8),(8));
+  v1 = v1 + 1.54;
+  if(v1 > 400){
+    v1 = random(-100,-250);
+  }
+ }   
+  
+//objetos nivel 3
+  if(nivel == 3 || nivel == 4 ||nivel == 5 || nivel > 5 ){
+  fill(0,0,200)
+  ellipse(n1,m1,30,30); 
+  fill(0,100,200);
+  ellipse(n1,m1,15,15);
+  fill(0,100,0);
+  ellipse(n1,m1,(8),(8));
+  n1 = n1 + 1.6;
+  if(n1 > 750){
+    n1 = random(-80,-180);
+  }
+    if(nivel == 3 || nivel == 4 ||nivel == 5 || nivel > 5 ){
+  fill(0,0,200)
+  ellipse(n2,m2,30,30); 
+  fill(0,100,200);
+  ellipse(n2,m2,15,15);
+  fill(0,100,0);
+  ellipse(n2,m2,(8),(8));
+  n2 = n2 + 1.5;
+  if(n2 > 400){
+    n2 = random(-340,-440);
+  }
+ } 
+}
+  
+  //objetos nivel 4
+  
+  if( nivel == 4 ||nivel == 5 || nivel > 5 ){
+  fill(255,0,0)
+  ellipse(n3,m3,30,30); 
+  fill(0,100,200);
+  ellipse(n3,m3,15,15);
+  fill(0,0,200);
+  ellipse(n3,m3,(8),(8));
+  m3 = m3 - 1.5;
+  if(m3 < 40){
+    m3 = random(640,740);
+  }
+ } 
+  
+ if( nivel == 4 || nivel == 5 || nivel > 5 ){
+  fill(255,0,0)
+  ellipse(n4,m4,30,30); 
+  fill(0,100,200);
+  ellipse(n4,m4,15,15);
+  fill(0,0,200);
+  ellipse(n4,m4,(8),(8));
+  m4 = m4 - 1.2;
+  if(m4 < 40){
+    m4 = random(540,640);
+  }
+ }   
+  
+  fill(255, 0, 30);
+  ellipse(q1,t1,20,20);
+  q1 = q1 + 1.8;
+  if(q1 > width){
+    q1 = random(-2000,-4000);
+  }
+  
+//objetos nivel 5 
+  
+  if(nivel == 5 || nivel > 5 ){
+  fill(255,255,255)
+  ellipse(n5,m5,30,30); 
+  fill(0,100,200);
+  ellipse(n5,m5,15,15);
+  fill(0,0,255);
+  ellipse(n5,m5,(8),(8));
+  n5 = n5 - 1.2;
+  if(n5 < 40){
+    n5 = random(540,640);
+  }
+ }
+  
+if(nivel == 5 || nivel > 5 ){
+  fill(255,255,255)
+  ellipse(n6,m6,30,30); 
+  fill(0,100,200);
+  ellipse(n6,m6,15,15);
+  fill(0,0,255);
+  ellipse(n6,m6,(8),(8));
+  n6 = n6 - 1.7;
+  if(n6 < 40){
+    n6 = random(540,670);
+  }
+ }
+  
+ if(nivel == 5 || nivel > 5 ){
+  fill(0,0,200)
+  ellipse(h2,h3,30,30); 
+  fill(0,100,200);
+  ellipse(h2,h3,15,15);
+  fill(0,100,0);
+  ellipse(h2,h3,(8),(8));
+  h2 = h2 - 1.7;
+  if(h2 < 40){
+    h2 = random(440,540);
+  }
+ }
+
+  
+  
+//colisão e soma de pontos e vidas
+  
+//nivel 1
+if(dist(xd,yd,z,p)<15+5){
+   colidir = true;
+}
+  
+if(colidir){
+  pontuacao = pontuacao + 1;
+  colidir = false;
+  xd = 450;
+  z = 490;
+}
+
+if(dist(xd,yd,q,t)<5+4){
+  colidir = false;
+  vidas = vidas + 1;
+  t = -1100;
+  
+}
+
+if(dist(x,y,z,p)<20+10){
+  coldir = true;
+  vidas = vidas - 1;
+  z = 490;
+} 
+  
+if(dist(xd,yd,f,g)<15+4){
+  colidir = true;
+}
+  
+if(colidir){
+  pontuacao = pontuacao + 1;
+  colidir = false;
+  xd = 450;
+  g = random(-300,-150);
+}
+
+
+if(dist(x,y,f,g)<20+10){
+  coldir = true;
+  vidas = vidas - 1;
+  g = random(-300,-150);
+}  
+  
+if(dist(xd,yd,h,h1)<15+4){
+  colidir = true;
+}
+  
+if(colidir){
+  pontuacao = pontuacao + 1;
+  colidir = false;
+  xd = 450;
+  h1 = random(-300,-400);
+}
+
+
+if(dist(x,y,h,h1)<20+10){
+  coldir = true;
+  vidas = vidas - 1;
+   h1 = random(-300,-400);
+}    
+ 
+//nivel 2
+  
+if(dist(xd,yd,n,m)<15+4){
+  colidir = true;
+}
+  
+if(colidir){
+  pontuacao = pontuacao + 1;
+  colidir = false;
+  xd = 450;
+  m = 490;
+}
+
+if(dist(x,y,n,m)<20+10){
+  coldir = true;
+  vidas = vidas - 1;
+  m = 490;
+}
+  
+  
+if(dist(xd,yd,v1,v2)<15+4){
+  colidir = true;
+}
+  
+if(colidir){
+  pontuacao = pontuacao + 1;
+  colidir = false;
+  xd = 450;
+  v1 = random(-100,-250);
+}
+
+
+if(dist(x,y,v1,v2)<20+10){
+  coldir = true;
+  vidas = vidas - 1;
+  v1 = random(-100,-250);
+}  
+  //nivel 3
+  
+ if(dist(xd,yd,n1,m1)<15+4){
+  colidir = true;
+}
+  
+if(colidir){
+  pontuacao = pontuacao + 1;
+  colidir = false;
+  xd = 450;
+  n1 = 490;
+}
+
+if(dist(x,y,n1,m1)<20+10){
+  coldir = true;
+  vidas = vidas - 1;
+  n1 = 490;
+} 
+  
+   if(dist(xd,yd,n2,m2)<15+4){
+  colidir = true;
+}
+  
+if(colidir){
+  pontuacao = pontuacao + 1;
+  colidir = false;
+  xd = 450;
+  n2 = 490;
+}
+
+if(dist(x,y,n2,m2)<20+10){
+  coldir = true;
+  vidas = vidas - 1;
+  n2 = 490;
+} 
+  
+  //nivel 4
+  
+if(dist(xd,yd,n3,m3)<15+4){
+  colidir = true;
+}
+  
+if(colidir){
+  pontuacao = pontuacao + 1;
+  colidir = false;
+  xd = 450;
+  m3 = random(640,740);
+}
+
+if(dist(x,y,n3,m3)<20+10){
+  coldir = true;
+  vidas = vidas - 2;
+  m3 = random(640,740)
+}
+  
+  
+if(dist(xd,yd,n4,m4)<15+4){
+  colidir = true;
+}
+  
+if(colidir){
+  pontuacao = pontuacao + 1;
+  colidir = false;
+  xd = 450;
+  m4 = random(640,740);
+}
+
+if(dist(x,y,n4,m4)<20+10){
+  coldir = true;
+  vidas = vidas - 2;
+  m4 = random(640,740);
+}
+  
+  if(dist(xd,yd,q1,t1)<5+4){
+  colidir = false;
+  vidas = vidas + 2;
+  q1 = random(-4000,-5000);  
+}
+  
+  
+ // nivel 5 
+    
+if(dist(xd,yd,n5,m5)<15+4){
+  colidir = true;
+}
+  
+if(colidir){
+  pontuacao = pontuacao + 1;
+  colidir = false;
+  xd = 450;
+  n5 = random(540,670) ;
+}
+
+if(dist(x,y,n5,m5)<20+10){
+  coldir = true;
+  vidas = vidas - 3;
+  n5 = random(540,670) ;
+}
+  
+  
+if(dist(xd,yd,n6,m6)<15+4){
+  colidir = true;
+}
+  
+if(colidir){
+  pontuacao = pontuacao + 1;
+  colidir = false;
+  xd = 450;
+  n6 = random(540,670) ;
+}
+
+if(dist(x,y,n6,m6)<20+10){
+  coldir = true;
+  vidas = vidas - 3;
+  n6 = random(540,670) ;
+}
+  
+if(dist(xd,yd,h2,h3)<15+4){
+  colidir = true;
+}
+  
+if(colidir){
+  pontuacao = pontuacao + 1;
+  colidir = false;
+  xd = 450;
+  h2 = random(540,670) ;
+}
+
+if(dist(x,y,h2,h3)<20+10){
+  coldir = true;
+  vidas = vidas - 3;
+  h2 = random(540,670) ;
+}  
+  
+  
+  
+//informações
+  
+  if(pontuacao >= (10*nivel)){
+    nivel = nivel + 1;
+  }  
+  
+  fill(250,250,250);
+  textSize(22);  
+  text("Pontos: "+pontuacao,0,460);
+  text("Vidas: "+vidas,0,500);
+  text("Nível: "+nivel,180,460);
+	}
+ else
+ {
+   fill(150,30,200);
+   textSize(25);
+   text("Parabéns, você concluiu o jogo !",35,240);
+   textSize(22);
+   text("Pressione ENTER para jogar novamente",20,300);
+   textSize(30);
+   text("😃",200,360);
+   if(keyIsDown(ENTER) ){
+ 	
+     continuar = 95 ;
+  }
+ }
+}
+   else
+  {
+    fill(255,0,0);
+    textSize(35);
+    text("😞",300,240);
+    textSize(35);
+    text("GAME OVER",90,240);
+    textSize(22);
+    text("Pressione ENTER para jogar novamente",20,300);
+       if(keyIsDown(ENTER) ){
+		
+	 disparo = false , xd , yd , xj , yj , q = 0 , t = 0 , q1 = 68 , t1 = 140 , colidir = false;
+
+	 vidas = 3 , pontuacao = 0 , nivel = 1;
+
+	 tamBloco = 40;
+
+	 x = 50 , y = 98, z = 15 , p = 220 , n = 220, m = -50 , f = 60 , g = -100 , h = 140 , h1 = -200 , h2 = 450 , h3 = 380 , n1 =-200 , m1 = 60 , n2 = -200 ,m2 = 380;
+
+	 n3 = 220 , m3 = 440 , n4 = 300 , m4 = 440 , n5 = 510 , m5 = 140 , n6 = 510 , m6 = 300 , v1 = -250 , v2 = 300 ;
+
+	 tela = 1 , continuar = 0 , img ;
+    }
+   }
+  }
+}
