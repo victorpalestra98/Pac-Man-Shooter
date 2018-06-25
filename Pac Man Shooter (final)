@@ -588,7 +588,7 @@ if(dist(x,y,h2,h3)<20+10){
    text("😃",200,360);
    if(keyIsDown(ENTER) ){
  	
-     continuar = 95 ;
+     continuar = 95 , disparo = false , colidir = false ;
   }
  }
 }
